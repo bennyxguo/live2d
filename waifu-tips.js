@@ -52,7 +52,7 @@ function loadWidget(config) {
       '好好认真学习哦～ 不要偷懒啦～！',
       '拿小拳拳锤你胸口！',
       '弹幕发“一起终身学习”可以签到哦～',
-      '弹幕发“我的学分”可以查看学习哦～',
+      '弹幕发“我的学分”可以查看学习积分哦～',
     ];
   window.addEventListener('mousemove', () => (userAction = true));
   window.addEventListener('keydown', () => (userAction = true));
