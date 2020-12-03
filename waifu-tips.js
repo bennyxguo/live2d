@@ -47,12 +47,12 @@ function loadWidget(config) {
     userActionTimer,
     messageTimer,
     messageArray = [
-      '好久不见，日子过得好快呢……',
+      '不努力，我会不开心心的哟……',
       '大坏蛋！你都多久没理人家了呀，嘤嘤嘤～',
-      '嗨～快来逗我玩吧！',
+      '好好认真学习哦～ 不要偷懒啦～！',
       '拿小拳拳锤你胸口！',
-      '弹幕发“一起终身学习”可以签到哦～ *比心*',
-      '弹幕发“我的学分”可以查看学习哦～ *比心*',
+      '弹幕发“一起终身学习”可以签到哦～',
+      '弹幕发“我的学分”可以查看学习哦～',
     ];
   window.addEventListener('mousemove', () => (userAction = true));
   window.addEventListener('keydown', () => (userAction = true));
@@ -63,6 +63,7 @@ function loadWidget(config) {
       userActionTimer = null;
     } else if (!userActionTimer) {
       userActionTimer = setInterval(() => {
+        // 如果是主页
         showMessage(randomSelection(messageArray), 6000, 9);
       }, 20000);
     }
