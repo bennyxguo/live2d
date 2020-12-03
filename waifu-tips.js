@@ -47,12 +47,13 @@ function loadWidget(config) {
     userActionTimer,
     messageTimer,
     messageArray = [
-      '不努力，我会不开心心的哟……',
+      '人家会一直陪着你的，与你一起走上学习之旅哟～',
+      '偷懒的话，我会不开心的哟……',
       '大坏蛋！你都多久没理人家了呀，嘤嘤嘤～',
-      '好好认真学习哦～ 不要偷懒啦～！',
-      '拿小拳拳锤你胸口！',
+      '好好认真学习哦～ 不许偷懒哟～！',
+      '拿小拳拳锤你胸口，主人你辛苦了！',
       '弹幕发“一起终身学习”可以签到哦～',
-      '弹幕发“我的学分”可以查看学习积分哦～',
+      '弹幕发“我的学分”可以查看签到积分哦～',
     ];
   window.addEventListener('mousemove', () => (userAction = true));
   window.addEventListener('keydown', () => (userAction = true));
