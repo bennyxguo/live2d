@@ -54,21 +54,83 @@ function loadWidget(config) {
       '拿小拳拳锤你胸口，主人你辛苦了！',
       '弹幕发“一起终身学习”可以签到哦～',
       '弹幕发“我的学分”可以查看签到积分哦～',
+      'welcomeMessage',
+      'showHitokoto',
     ];
   window.addEventListener('mousemove', () => (userAction = true));
   window.addEventListener('keydown', () => (userAction = true));
+  // setInterval(() => {
+  //   if (userAction) {
+  //     userAction = false;
+  //     clearInterval(userActionTimer);
+  //     userActionTimer = null;
+  //   } else if (!userActionTimer) {
+  //     userActionTimer = setInterval(() => {
+  //       // 如果是主页
+  //       showMessage(randomSelection(messageArray), 6000, 9);
+  //     }, 20000);
+  //   }
+  // }, 1000);
+
+  userActionTimer = setInterval(() => {
+    // 如果是主页
+    showMessage(randomSelection(messageArray), 6000, 9);
+  }, 20000);
+
   setInterval(() => {
-    if (userAction) {
-      userAction = false;
-      clearInterval(userActionTimer);
-      userActionTimer = null;
-    } else if (!userActionTimer) {
-      userActionTimer = setInterval(() => {
-        // 如果是主页
-        showMessage(randomSelection(messageArray), 6000, 9);
-      }, 20000);
+    requestAnimationFrame(simulateMouseMove);
+    console.log('moved');
+  }, 20000);
+
+  let lastX = 0,
+    lastY = 0,
+    moves = 0,
+    maxMoves = 3,
+    index = 0;
+
+  function simulateMouseMove(a) {
+    const noiseX = (noise.simplex3(2, 0, a * 0.0005) + 1) / 2;
+    const noiseY = (noise.simplex3(10, 0, a * 0.0005) + 1) / 2;
+    const x = Math.ceil(noiseX * innerWidth);
+    const y = Math.ceil(noiseY * innerHeight);
+
+    const distToX = x - lastX;
+    const distToY = y - lastY;
+    const directionX = distToX < 0 ? -1 : 1;
+    const directionY = distToY < 0 ? -1 : 1;
+
+    let randomSpeed = Math.random() * (16 - 8) + 8;
+
+    while (lastX != x && lastY != y) {
+      lastX = lastX + directionX;
+      lastY = lastY + directionY;
+      index++;
+      moveMouse(lastX, lastY, index, randomSpeed);
     }
-  }, 1000);
+
+    moves++;
+    console.log(moves);
+    if (moves < maxMoves) {
+      requestAnimationFrame(simulateMouseMove);
+    } else {
+      moves = 0;
+      index = 0;
+    }
+  }
+
+  function moveMouse(x, y, index) {
+    setTimeout(() => {
+      document.dispatchEvent(
+        new MouseEvent('mousemove', {
+          clientX: x,
+          clientY: y,
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        })
+      );
+    }, 16 * index);
+  }
 
   (function registerEventListener() {
     document.querySelector('#waifu-tool .fa-comment').addEventListener('click', showHitokoto);
@@ -147,7 +209,7 @@ function loadWidget(config) {
         }」</span>`;
       else text = `Hello！来自 <span>${referrer.hostname}</span> 的朋友`;
     } else {
-      text = `欢迎阅读<span>「${document.title.split(' - ')[0]}」</span>`;
+      text = `欢迎来到<span>「${document.title.split(' - ')[0]}」</span>`;
     }
     showMessage(text, 7000, 8);
   })();
@@ -171,10 +233,22 @@ function loadWidget(config) {
       (sessionStorage.getItem('waifu-text') && sessionStorage.getItem('waifu-text') > priority)
     )
       return;
+
     if (messageTimer) {
       clearTimeout(messageTimer);
       messageTimer = null;
     }
+
+    if (text === 'showHitokoto') {
+      showHitokoto();
+      return;
+    }
+
+    if (text === 'welcomeMessage') {
+      welcomeMessage();
+      return;
+    }
+
     text = randomSelection(text);
     sessionStorage.setItem('waifu-text', priority);
     const tips = document.getElementById('waifu-tips');
