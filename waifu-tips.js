@@ -75,12 +75,12 @@ function loadWidget(config) {
   userActionTimer = setInterval(() => {
     // 如果是主页
     showMessage(randomSelection(messageArray), 6000, 9);
-  }, 20000);
+  }, 30000);
 
   setInterval(() => {
     requestAnimationFrame(simulateMouseMove);
     console.log('moved');
-  }, 20000);
+  }, 30000);
 
   let lastX = 0,
     lastY = 0,
