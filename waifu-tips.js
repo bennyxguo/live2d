@@ -3,6 +3,9 @@
  * https://github.com/stevenjoezhang/live2d-widget
  */
 
+let firstEnter = true;
+let startTime = Date.now();
+
 function loadWidget(config) {
   let { waifuPath, apiPath, cdnPath } = config;
   let useCDN = false,
@@ -49,13 +52,11 @@ function loadWidget(config) {
     messageArray = [
       '人家会一直陪着你的，与你一起走上学习之旅哟～',
       '偷懒的话，我会不开心的哟……',
-      '大坏蛋！你都多久没理人家了呀，嘤嘤嘤～',
-      '好好认真学习哦～ 不许偷懒哟～！',
-      '拿小拳拳锤你胸口，主人你辛苦了！',
       '弹幕发“一起终身学习”可以签到哦～',
       '弹幕发“我的学分”可以查看签到积分哦～',
       'welcomeMessage',
       'showHitokoto',
+      'showTime',
     ];
   window.addEventListener('mousemove', () => (userAction = true));
   window.addEventListener('keydown', () => (userAction = true));
@@ -79,7 +80,6 @@ function loadWidget(config) {
 
   setInterval(() => {
     requestAnimationFrame(simulateMouseMove);
-    console.log('moved');
   }, 30000);
 
   let lastX = 0,
@@ -109,7 +109,6 @@ function loadWidget(config) {
     }
 
     moves++;
-    console.log(moves);
     if (moves < maxMoves) {
       requestAnimationFrame(simulateMouseMove);
     } else {
@@ -176,9 +175,9 @@ function loadWidget(config) {
     });
   })();
 
-  (function welcomeMessage() {
+  function welcomeMessage() {
     let text;
-    if (location.pathname === '/') {
+    if (!firstEnter) {
       // 如果是主页
       const now = new Date().getHours();
       if (now > 5 && now <= 7) text = '早上好！一日之计在于晨，美好的一天就要开始了。';
@@ -208,11 +207,14 @@ function loadWidget(config) {
           document.title.split(' - ')[0]
         }」</span>`;
       else text = `Hello！来自 <span>${referrer.hostname}</span> 的朋友`;
+
+      firstEnter = false;
     } else {
       text = `欢迎来到<span>「${document.title.split(' - ')[0]}」</span>`;
+      firstEnter = false;
     }
     showMessage(text, 7000, 8);
-  })();
+  }
 
   function showHitokoto() {
     // 增加 hitokoto.cn 的 API
@@ -227,6 +229,16 @@ function loadWidget(config) {
       });
   }
 
+  function showTime() {
+    const duration = (Date.now() - startTime) / 1000;
+    const hours = Math.floor(duration / 3600) % 24;
+    const minutes = Math.floor(duration % 60) % 60;
+    const seconds = duration % 60;
+    const startFrom = new Date(startTime).toLocaleTimeString('zh-CN');
+    const text = `从<span>${startFrom}</span>，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟，<span>${seconds}</span>，秒。`;
+    showMessage(text, 9000, 8);
+  }
+
   function showMessage(text, timeout, priority) {
     if (
       !text ||
@@ -237,6 +249,11 @@ function loadWidget(config) {
     if (messageTimer) {
       clearTimeout(messageTimer);
       messageTimer = null;
+    }
+
+    if (text === 'showTime') {
+      showTime();
+      return;
     }
 
     if (text === 'showHitokoto') {
@@ -260,13 +277,24 @@ function loadWidget(config) {
     }, timeout);
   }
 
+  function setInitialModel() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const modelId = urlParams.get('modelId');
+    const modelTexturesId = urlParams.get('modelTexturesId');
+
+    if (modelId) localStorage.setItem('modelId', modelId);
+    if (modelTexturesId) localStorage.setItem('modelTexturesId', modelTexturesId);
+  }
+
   (function initModel() {
+    setInitialModel();
     let modelId = localStorage.getItem('modelId'),
       modelTexturesId = localStorage.getItem('modelTexturesId');
     if (modelId === null) {
       // 首次访问加载 指定模型 的 指定材质
-      modelId = 1; // 模型 ID
-      modelTexturesId = 53; // 材质 ID
+      modelId = 6; // 模型 ID
+      modelTexturesId = 10; // 材质 ID
     }
     loadModel(modelId, modelTexturesId);
     fetch(waifuPath)
@@ -306,6 +334,7 @@ function loadWidget(config) {
             messageArray.push(text);
           }
         });
+        welcomeMessage();
       });
   })();
 
@@ -321,7 +350,8 @@ function loadWidget(config) {
     if (useCDN) {
       if (!modelList) await loadModelList();
       const target = randomSelection(modelList.models[modelId]);
-      loadlive2d('live2d', `${cdnPath}model/${target}/index.json`);
+      // loadlive2d('live2d', `${cdnPath}model/${target}/index.json`);
+      loadlive2d('live2d', `${cdnPath}get/?id=${modelId}-${modelTexturesId}`);
     } else {
       loadlive2d('live2d', `${apiPath}get/?id=${modelId}-${modelTexturesId}`);
       console.log(`Live2D 模型 ${modelId}-${modelTexturesId} 加载完成`);
