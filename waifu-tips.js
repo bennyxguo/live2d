@@ -50,7 +50,7 @@ function loadWidget(config) {
     userActionTimer,
     messageTimer,
     messageArray = [
-      '人家会一直陪着你的，与你一起走上学习之旅哟～',
+      '我会一直陪着你的，与你一起走上学习之旅哟～',
       '偷懒的话，我会不开心的哟……',
       '弹幕发“一起终身学习”可以签到哦～',
       '弹幕发“我的学分”可以查看签到积分哦～',
@@ -232,10 +232,10 @@ function loadWidget(config) {
   function showTime() {
     const duration = (Date.now() - startTime) / 1000;
     const hours = Math.floor(duration / 3600) % 24;
-    const minutes = Math.floor(duration % 60) % 60;
-    const seconds = duration % 60;
+    const minutes = Math.floor(duration / 60) % 60;
+    const seconds = (duration % 60).toFixed(1);
     const startFrom = new Date(startTime).toLocaleTimeString('zh-CN');
-    const text = `从<span>${startFrom}</span>，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟，<span>${seconds}</span>，秒。`;
+    const text = `从<span>${startFrom}</span>，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟，<span>${seconds}</span>秒。`;
     showMessage(text, 9000, 8);
   }
 
