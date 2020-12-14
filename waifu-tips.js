@@ -233,9 +233,8 @@ function loadWidget(config) {
     const duration = (Date.now() - startTime) / 1000;
     const hours = Math.floor(duration / 3600) % 24;
     const minutes = Math.floor(duration / 60) % 60;
-    const seconds = (duration % 60).toFixed(1);
     const startFrom = new Date(startTime).toLocaleTimeString('zh-CN');
-    const text = `从<span>${startFrom}</span>，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟，<span>${seconds}</span>秒。`;
+    const text = `从<span>${startFrom}</span>，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟。`;
     showMessage(text, 9000, 8);
   }
 
@@ -285,6 +284,16 @@ function loadWidget(config) {
 
     if (modelId) localStorage.setItem('modelId', modelId);
     if (modelTexturesId) localStorage.setItem('modelTexturesId', modelTexturesId);
+
+    const setStartTime = urlParams.get('startTime');
+    const currentDate = new Date(startTime);
+
+    if (setStartTime)
+      startTime = Date.parse(
+        `${currentDate.getFullYear()}-${
+          currentDate.getMonth() + 1
+        }-${currentDate.getDate()} ${setStartTime}`
+      );
   }
 
   (function initModel() {
@@ -346,6 +355,7 @@ function loadWidget(config) {
   async function loadModel(modelId, modelTexturesId, message) {
     localStorage.setItem('modelId', modelId);
     localStorage.setItem('modelTexturesId', modelTexturesId);
+    // console.log('modelId', modelId, 'modelTexturesId', modelTexturesId);
     showMessage(message, 4000, 10);
     if (useCDN) {
       if (!modelList) await loadModelList();
