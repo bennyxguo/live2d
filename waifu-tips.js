@@ -50,8 +50,7 @@ function loadWidget(config) {
     userActionTimer,
     messageTimer,
     messageArray = [
-      '我会一直陪着你的，与你一起走上学习之旅哟～',
-      '偷懒的话，我会不开心的哟……',
+      '喜欢主人直播间的，关注一下他吧 <3',
       '弹幕发“一起终身学习”可以签到哦～',
       '弹幕发“我的学分”可以查看签到积分哦～',
       'welcomeMessage',
@@ -180,7 +179,7 @@ function loadWidget(config) {
     if (!firstEnter) {
       // 如果是主页
       const now = new Date().getHours();
-      if (now > 5 && now <= 7) text = '早上好！一日之计在于晨，美好的一天就要开始了。';
+      if (now => 5 && now <= 7) text = '早上好！一日之计在于晨，美好的一天就要开始了。';
       else if (now > 7 && now <= 11) text = '上午好！工作顺利嘛，不要久坐，多起来走动走动哦！';
       else if (now > 11 && now <= 13) text = '中午了，工作了一个上午，现在是午餐时间！';
       else if (now > 13 && now <= 17) text = '午后很容易犯困呢，今天的运动目标完成了吗？';
@@ -221,11 +220,11 @@ function loadWidget(config) {
     fetch('https://v1.hitokoto.cn')
       .then(response => response.json())
       .then(result => {
-        const text = `这句一言来自 <span>「${result.from}」</span>，是 <span>${result.creator}</span> 在 hitokoto.cn 投稿的。`;
+        // const text = `这句一言来自 <span>「${result.from}」</span>，是 <span>${result.creator}</span> 在 hitokoto.cn 投稿的。`;
         showMessage(result.hitokoto, 6000, 9);
-        setTimeout(() => {
-          showMessage(text, 4000, 9);
-        }, 6000);
+        // setTimeout(() => {
+        //   showMessage(text, 4000, 9);
+        // }, 6000);
       });
   }
 
