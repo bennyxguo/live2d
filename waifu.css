@@ -39,8 +39,10 @@
 
 #waifu-tips {
   animation: shake 50s ease-in-out 5s infinite;
-  background-color: rgba(236, 217, 188, 0.5);
-  border: 1px solid rgba(224, 186, 140, 0.62);
+  /* background-color: rgba(236, 217, 188, 0.5);
+  border: 1px solid rgba(224, 186, 140, 0.62); */
+  background-color: rgba(255, 196, 212, 0.5) !important;
+  border: 1px solid rgba(234, 123, 153, 0.62);
   border-radius: 12px;
   box-shadow: 0 3px 15px 2px rgba(191, 158, 118, 0.2);
   font-size: 14px;
@@ -63,7 +65,7 @@
 }
 
 #waifu-tips span {
-  color: #1191db;
+  color: #8c1e18;
 }
 
 #waifu #live2d {
