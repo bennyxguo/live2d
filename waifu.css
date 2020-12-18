@@ -41,8 +41,8 @@
   animation: shake 50s ease-in-out 5s infinite;
   /* background-color: rgba(236, 217, 188, 0.5);
   border: 1px solid rgba(224, 186, 140, 0.62); */
-  background-color: rgba(255, 196, 212, 0.5) !important;
-  border: 1px solid rgba(234, 123, 153, 0.62);
+  background-color: rgba(24, 23, 34, 0.85);
+  border: 3px solid rgb(207, 104, 95, 1);
   border-radius: 12px;
   box-shadow: 0 3px 15px 2px rgba(191, 158, 118, 0.2);
   font-size: 14px;
@@ -70,7 +70,7 @@
   -webkit-text-fill-color: transparent;
   padding: 0 0.1rem;
   background-color: #fdfc47;
-  background-image: linear-gradient(62deg, #fdfc47 0%, #43ffff 100%) !important;
+  background-image: linear-gradient(62deg, #f7ff00 0%, #db36a4 100%) !important;
 }
 
 #waifu #live2d {

@@ -234,7 +234,7 @@ function loadWidget(config) {
     const hours = Math.floor(duration / 3600) % 24;
     const minutes = Math.floor(duration / 60) % 60;
     const startFrom = new Date(startTime).toLocaleTimeString('zh-CN');
-    const text = `掐指一算，从今天的<span>${startFrom}</span>开始，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟咯。棒棒哒！～`;
+    const text = `掐指一算，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟咯。棒棒哒！～`;
     showMessage(text, 9000, 8);
   }
 
