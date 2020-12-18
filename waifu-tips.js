@@ -50,9 +50,10 @@ function loadWidget(config) {
     userActionTimer,
     messageTimer,
     messageArray = [
-      '喜欢主人直播间的，关注一下他吧 <3',
-      '弹幕发“一起终身学习”可以签到哦～',
-      '弹幕发“我的学分”可以查看签到积分哦～',
+      '喜欢主人直播间的，<span>关注一下他吧</span> <3',
+      '弹幕发“<span>一起终身学习</span>”可以签到哦～',
+      '弹幕发“<span>我的学分</span>”可以查看签到积分哦～',
+      '感谢大家一起陪伴我主人学习哦～<span>么么哒</span> <3',
       'welcomeMessage',
       'showHitokoto',
       'showTime',
@@ -179,7 +180,7 @@ function loadWidget(config) {
     if (!firstEnter) {
       // 如果是主页
       const now = new Date().getHours();
-      if (now => 5 && now <= 7) text = '早上好！一日之计在于晨，美好的一天就要开始了。';
+      if (now >= 5 && now <= 7) text = '早上好！一日之计在于晨，美好的一天就要开始了。';
       else if (now > 7 && now <= 11) text = '上午好！工作顺利嘛，不要久坐，多起来走动走动哦！';
       else if (now > 11 && now <= 13) text = '中午了，工作了一个上午，现在是午餐时间！';
       else if (now > 13 && now <= 17) text = '午后很容易犯困呢，今天的运动目标完成了吗？';
@@ -233,7 +234,7 @@ function loadWidget(config) {
     const hours = Math.floor(duration / 3600) % 24;
     const minutes = Math.floor(duration / 60) % 60;
     const startFrom = new Date(startTime).toLocaleTimeString('zh-CN');
-    const text = `从<span>${startFrom}</span>，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟。`;
+    const text = `掐指一算，从今天的<span>${startFrom}</span>开始，主人已学习了 <span>${hours}</span> 个小时，<span>${minutes}</span> 分钟咯。棒棒哒！～`;
     showMessage(text, 9000, 8);
   }
 

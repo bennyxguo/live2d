@@ -65,7 +65,12 @@
 }
 
 #waifu-tips span {
-  color: #8c1e18;
+  color: #ffd700;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 0 0.1rem;
+  background-color: #fdfc47;
+  background-image: linear-gradient(62deg, #fdfc47 0%, #24fe41 100%) !important;
 }
 
 #waifu #live2d {
