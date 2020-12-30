@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Raining</title>
+    <style>
+      html,
+      body {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .container {
+        background: limegreen;
+      }
+
+      canvas {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        z-index: 200;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/EaselJS/0.8.0/easeljs.min.js"></script>
+    <script>
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const count = 500;
+      const rain = [];
+      var w, h;
+
+      function init() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        window.addEventListener('resize', onResizeHandler);
+        createjs.Ticker.addEventListener('tick', handleTick);
+        createjs.Ticker.framerate = 100;
+        pushRain();
+      }
+
+      // to generate finite values
+      function random(min, max) {
+        return min + Math.random() * (max - min + 1);
+      }
+
+      function pushRain() {
+        for (var i = 0; i < count; i++) {
+          rain.push({
+            x: Math.random() * w * 1.2,
+            y: Math.random() * h,
+            length: Math.random() * 2.5,
+            width: random(1, 1),
+            opacity: random(0.1, 0.5),
+            speedX: random(-1, -2),
+            speedY: random(7, 15),
+          });
+        }
+      }
+
+      function draw() {
+        let i = 0;
+        for (i = 0; i < rain.length; i++) {
+          const raindrop = rain[i];
+          const startpoint = { x: raindrop.x, y: raindrop.y };
+          const endpoint = {
+            x: raindrop.x + raindrop.speedX * raindrop.length,
+            y: raindrop.y + raindrop.speedY * raindrop.length,
+          };
+          const grad = ctx.createLinearGradient(startpoint.x, startpoint.y, endpoint.x, endpoint.y);
+          grad.addColorStop(0, 'rgba(236,236,236,0)');
+          grad.addColorStop(1, 'rgba(236,236,236,' + raindrop.opacity + ')');
+
+          ctx.beginPath();
+          ctx.moveTo(startpoint.x, startpoint.y);
+          ctx.lineTo(endpoint.x, endpoint.y);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = raindrop.width;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+      }
+
+      function move() {
+        let i = 0;
+        for (i = 0; i < rain.length; i++) {
+          let raindrop = rain[i];
+          raindrop.x += raindrop.speedX;
+          raindrop.y += raindrop.speedY;
+          if (raindrop.y > h) {
+            raindrop.x = Math.random() * w * 1.2;
+            raindrop.y = -20;
+          }
+        }
+      }
+
+      function update() {
+        ctx.clearRect(0, 0, w, h);
+        move();
+        draw();
+      }
+
+      function onResizeHandler() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+
+      function handleTick(ev) {
+        if (!ev.paused) {
+          update();
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>
