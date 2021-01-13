@@ -61,7 +61,11 @@
         width: 1px;
         height: 60%;
         margin-left: 7px;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 1)
+        );
         animation: stem 0.5s linear infinite;
       }
 
@@ -191,20 +195,20 @@
   <script>
     var makeItRain = function () {
       //clear out everything
-      $('.rain').empty();
+      $('.rain').empty()
 
-      var increment = 0;
-      var drops = '';
-      var backDrops = '';
+      var increment = 0
+      var drops = ''
+      var backDrops = ''
 
       while (increment < 100) {
         //couple random numbers to use for various randomizations
         //random number between 98 and 1
-        var randoHundo = Math.floor(Math.random() * (98 - 1 + 1) + 1);
+        var randoHundo = Math.floor(Math.random() * (98 - 1 + 1) + 1)
         //random number between 5 and 2
-        var randoFiver = Math.floor(Math.random() * (5 - 2 + 1) + 2);
+        var randoFiver = Math.floor(Math.random() * (5 - 2 + 1) + 2)
         //increment
-        increment += randoFiver;
+        increment += randoFiver
         //add in a new raindrop with various randomizations to certain CSS properties
         drops +=
           '<div class="drop" style="left: ' +
@@ -223,7 +227,7 @@
           randoHundo +
           's; animation-duration: 0.5' +
           randoHundo +
-          's;"></div></div>';
+          's;"></div></div>'
         backDrops +=
           '<div class="drop" style="right: ' +
           increment +
@@ -241,31 +245,31 @@
           randoHundo +
           's; animation-duration: 0.5' +
           randoHundo +
-          's;"></div></div>';
+          's;"></div></div>'
       }
 
-      $('.rain.front-row').append(drops);
-      $('.rain.back-row').append(backDrops);
-    };
+      $('.rain.front-row').append(drops)
+      $('.rain.back-row').append(backDrops)
+    }
 
     $('.splat-toggle.toggle').on('click', function () {
-      $('body').toggleClass('splat-toggle');
-      $('.splat-toggle.toggle').toggleClass('active');
-      makeItRain();
-    });
+      $('body').toggleClass('splat-toggle')
+      $('.splat-toggle.toggle').toggleClass('active')
+      makeItRain()
+    })
 
     $('.back-row-toggle.toggle').on('click', function () {
-      $('body').toggleClass('back-row-toggle');
-      $('.back-row-toggle.toggle').toggleClass('active');
-      makeItRain();
-    });
+      $('body').toggleClass('back-row-toggle')
+      $('.back-row-toggle.toggle').toggleClass('active')
+      makeItRain()
+    })
 
     $('.single-toggle.toggle').on('click', function () {
-      $('body').toggleClass('single-toggle');
-      $('.single-toggle.toggle').toggleClass('active');
-      makeItRain();
-    });
+      $('body').toggleClass('single-toggle')
+      $('.single-toggle.toggle').toggleClass('active')
+      makeItRain()
+    })
 
-    makeItRain();
+    makeItRain()
   </script>
 </html>
