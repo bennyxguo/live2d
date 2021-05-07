@@ -1,7 +1,7 @@
 // 注意：live2d_path 参数应使用绝对路径
-const live2d_path =
-  'https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/'
+const live2d_path = 'https://cdn.jsdelivr.net/gh/tridiamond/live2d@latest/'
 const local_live2d_path = './'
+const waifu_audio_name = 'erxia'
 
 // 封装异步加载资源的方法
 function loadExternalResource(url, type) {
@@ -28,11 +28,13 @@ function loadExternalResource(url, type) {
 if (screen.width >= 768) {
   Promise.all([
     loadExternalResource(local_live2d_path + 'waifu.css', 'css'),
-    loadExternalResource(live2d_path + 'live2d.min.js', 'js'),
+    loadExternalResource(local_live2d_path + 'live2d.min.js', 'js'),
     loadExternalResource(local_live2d_path + 'waifu-tips.js', 'js'),
   ]).then(() => {
     initWidget({
-      waifuPath: local_live2d_path + 'waifu-tips.json',
+      waifuPath: `${local_live2d_path}waitfu-tips.json`, // waifu script
+      audioPath: `${local_live2d_path}audio/${waifu_audio_name}/`, // audio location
+      messagePath: `${local_live2d_path}audio/${waifu_audio_name}/play.json`, // message config data
       apiPath: 'https://live2d.fghrsh.net/api/',
       // cdnPath: 'https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/',
       // apiPath: 'https://api.zsq.im/live2d',

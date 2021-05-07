@@ -5,11 +5,16 @@
 
 let firstEnter = true
 let startTime = Date.now()
+let AUDIO_CONFIG = {
+  audioPath: '',
+  messagePath: '',
+}
 
 function loadWidget(config) {
-  let { waifuPath, apiPath, cdnPath } = config
+  let { waifuPath, apiPath, cdnPath, audioPath, messagePath } = config
   let useCDN = false,
     modelList
+
   if (typeof cdnPath === 'string') {
     useCDN = true
     if (!cdnPath.endsWith('/')) cdnPath += '/'
@@ -19,6 +24,17 @@ function loadWidget(config) {
     console.error('Invalid initWidget argument!')
     return
   }
+
+  if (typeof audioPath !== 'string' || typeof messagePath !== 'string') {
+    console.error('Invalid initWidget argument!')
+    return
+  }
+
+  AUDIO_CONFIG = {
+    audioPath: audioPath,
+    messagePath: messagePath,
+  }
+
   localStorage.removeItem('waifu-display')
   sessionStorage.removeItem('waifu-text')
   document.body.insertAdjacentHTML(
@@ -47,6 +63,7 @@ function loadWidget(config) {
       ? obj[Math.floor(Math.random() * obj.length)]
       : obj
   }
+
   // 检测用户活动状态，并在空闲时显示消息
   let userAction = false,
     userActionTimer,
@@ -55,25 +72,14 @@ function loadWidget(config) {
       '喜欢主人直播间的，<span>关注一下他吧</span> <3',
       '弹幕发“<span>一起终身学习</span>”可以签到哦～',
       '弹幕发“<span>我的学分</span>”可以查看签到积分哦～',
-      '感谢大家一起陪伴我主人学习哦～<span>么么哒</span> <3',
+      'playAudio',
       'welcomeMessage',
-      'showHitokoto',
+      // 'showHitokoto',
       'showTime',
     ]
+
   window.addEventListener('mousemove', () => (userAction = true))
   window.addEventListener('keydown', () => (userAction = true))
-  // setInterval(() => {
-  //   if (userAction) {
-  //     userAction = false;
-  //     clearInterval(userActionTimer);
-  //     userActionTimer = null;
-  //   } else if (!userActionTimer) {
-  //     userActionTimer = setInterval(() => {
-  //       // 如果是主页
-  //       showMessage(randomSelection(messageArray), 6000, 9);
-  //     }, 20000);
-  //   }
-  // }, 1000);
 
   userActionTimer = setInterval(() => {
     // 如果是主页
@@ -253,6 +259,23 @@ function loadWidget(config) {
       })
   }
 
+  function playAudio() {
+    if (!AUDIO_CONFIG) return
+
+    const { audioPath, messagePath } = AUDIO_CONFIG
+
+    fetch(messagePath)
+      .then((response) => response.json())
+      .then((result) => {
+        const randomSelection = Math.floor(Math.random() * result.texts.length)
+        const audio = new Audio(`${audioPath}${result.voices[randomSelection]}`)
+        const text = result.texts[randomSelection]
+
+        showMessage(text, 6000, 9)
+        audio.play()
+      })
+  }
+
   function showTime() {
     const duration = (Date.now() - startTime) / 1000
     const hours = Math.floor(duration / 3600) % 24
@@ -287,6 +310,11 @@ function loadWidget(config) {
 
     if (text === 'welcomeMessage') {
       welcomeMessage()
+      return
+    }
+
+    if (text === 'playAudio') {
+      playAudio()
       return
     }
 
