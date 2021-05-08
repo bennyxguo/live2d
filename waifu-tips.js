@@ -58,10 +58,16 @@ function loadWidget(config) {
     document.getElementById('waifu').style.bottom = 0
   }, 0)
 
-  function randomSelection(obj) {
-    return Array.isArray(obj)
-      ? obj[Math.floor(Math.random() * obj.length)]
-      : obj
+  function randomSelection(obj, requireIndex = false) {
+    const index = Math.floor(Math.random() * obj.length)
+    const result = Array.isArray(obj) ? obj[index] : obj
+    if (requireIndex) {
+      return {
+        result: result,
+        index: index,
+      }
+    }
+    return result
   }
 
   // 检测用户活动状态，并在空闲时显示消息
@@ -73,9 +79,9 @@ function loadWidget(config) {
       '弹幕发“<span>一起终身学习</span>”可以签到哦～',
       '弹幕发“<span>我的学分</span>”可以查看签到积分哦～',
       'playAudio',
-      'welcomeMessage',
-      // 'showHitokoto',
       'showTime',
+      // 'welcomeMessage',
+      // 'showHitokoto',
     ]
 
   window.addEventListener('mousemove', () => (userAction = true))
@@ -251,11 +257,7 @@ function loadWidget(config) {
     fetch('https://v1.hitokoto.cn')
       .then((response) => response.json())
       .then((result) => {
-        // const text = `这句一言来自 <span>「${result.from}」</span>，是 <span>${result.creator}</span> 在 hitokoto.cn 投稿的。`;
         showMessage(result.hitokoto, 6000, 9)
-        // setTimeout(() => {
-        //   showMessage(text, 4000, 9);
-        // }, 6000);
       })
   }
 
@@ -263,16 +265,47 @@ function loadWidget(config) {
     if (!AUDIO_CONFIG) return
 
     const { audioPath, messagePath } = AUDIO_CONFIG
+    const playChoice = randomSelection([('greetings', 'randoms')])
+
+    function greetingTime() {
+      const now = new Date().getHours()
+      if (now >= 5 && now <= 11) return '5_11'
+      else if (now > 11 && now <= 14) return '11_14'
+      else if (now >= 17 && now <= 21) return '17_21'
+      else if (now > 21 || now < 5) return '21_5'
+      else return 'other'
+    }
 
     fetch(messagePath)
       .then((response) => response.json())
       .then((result) => {
-        const randomSelection = Math.floor(Math.random() * result.texts.length)
-        const audio = new Audio(`${audioPath}${result.voices[randomSelection]}`)
-        const text = result.texts[randomSelection]
+        let text = ''
+        let audio = null
 
-        showMessage(text, 6000, 9)
-        audio.play()
+        const timeIndex = greetingTime()
+        if (playChoice === 'greetings' && result.greetings.texts[timeIndex]) {
+          const outputChoice = randomSelection(
+            result.greetings.texts[timeIndex],
+            true
+          )
+          text = outputChoice.result
+          audio = new Audio(
+            `${audioPath}${
+              result.greetings.voices[timeIndex][outputChoice.index]
+            }`
+          )
+        } else {
+          const outputChoice = randomSelection(result.texts, true)
+          text = outputChoice.result
+          audio = new Audio(`${audioPath}${result.voices[outputChoice.index]}`)
+        }
+
+        if (text && audio) {
+          setTimeout(function () {
+            showMessage(text, 9000, 9)
+          }, 200)
+          audio.play()
+        }
       })
   }
 

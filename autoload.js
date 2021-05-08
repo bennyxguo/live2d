@@ -32,7 +32,7 @@ if (screen.width >= 768) {
     loadExternalResource(local_live2d_path + 'waifu-tips.js', 'js'),
   ]).then(() => {
     initWidget({
-      waifuPath: `${local_live2d_path}waitfu-tips.json`, // waifu script
+      waifuPath: `${local_live2d_path}waifu-tips.json`, // waifu script
       audioPath: `${local_live2d_path}audio/${waifu_audio_name}/`, // audio location
       messagePath: `${local_live2d_path}audio/${waifu_audio_name}/play.json`, // message config data
       apiPath: 'https://live2d.fghrsh.net/api/',
