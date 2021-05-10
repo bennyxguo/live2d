@@ -304,7 +304,7 @@ function loadWidget(config) {
           setTimeout(function () {
             showMessage(text, 9000, 9)
           }, 200)
-          audio.play()
+          // audio.play()
         }
       })
   }
