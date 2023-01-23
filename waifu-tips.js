@@ -74,16 +74,22 @@ function loadWidget(config) {
   let userAction = false,
     userActionTimer,
     messageTimer,
-    messageArray = [
-      '喜欢主人的，<span>关注一下他吧</span> <3',
-      'QQ群里面有“<span>模组清单</span>”哦～',
-      '祝大家“<span>新年快乐</span>”～',
-      '我是你们钻姐! <3',
-      // 'playAudio',
-      'showTime'
-      // 'welcomeMessage',
-      // 'showHitokoto',
-    ];
+    gameMessages = {
+      ETS: [
+        'QQ群里面有“<span>模组清单</span>”哦～',
+        '大家一定要遵守交通规矩哦！',
+        '游戏只是模拟驾驶，请不要模仿哦！'
+      ]
+    };
+  messageArray = [
+    '喜欢主人的，<span>关注一下他吧</span> <3',
+    '祝大家“<span>新年快乐</span>”～',
+    '我是你们钻姐! <3',
+    // 'playAudio',
+    'showTime'
+    // 'welcomeMessage',
+    // 'showHitokoto',
+  ];
 
   window.addEventListener('mousemove', () => (userAction = true));
   window.addEventListener('keydown', () => (userAction = true));
@@ -340,6 +346,11 @@ function loadWidget(config) {
     const urlParams = new URLSearchParams(queryString);
     const modelId = urlParams.get('modelId');
     const modelTexturesId = urlParams.get('modelTexturesId');
+    const game = urlParams.get('game');
+
+    if (game && gameMessages[game]) {
+      messageArray = [...messageArray, ...gameMessages[game]];
+    }
 
     if (modelId) localStorage.setItem('modelId', modelId);
     if (modelTexturesId) localStorage.setItem('modelTexturesId', modelTexturesId);
